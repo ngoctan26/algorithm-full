@@ -1,4 +1,4 @@
-package com.nqntan.fullproject.test;
+package com.nqntan.algorithm.full;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,7 @@ public class TestSearchEngine {
         public Node[] children;
         public int countWord;
         public int weight;
+        public int countPass;
 
         public Node() {
             countWord = 0;
@@ -54,6 +55,7 @@ public class TestSearchEngine {
         public void addWord(String s, int weight) {
             int ch;
             Node temp = root;
+            int countPass = 0;
             for (int i = 0; i < s.length(); i++) {
                 ch = s.charAt(i) - 'a';
                 if (temp.children[ch] == null) {
@@ -61,8 +63,12 @@ public class TestSearchEngine {
                     temp.children[ch] = x;
                 }
                 temp = temp.children[ch];
+                if (temp.countWord > 0) {
+                    countPass++;
+                }
             }
             temp.weight = weight;
+            temp.countPass = countPass;
             temp.countWord++;
         }
 

@@ -1,4 +1,7 @@
 package com.nqntan.algorithm.full;
 
-public class TestConsistencyChecker {
+/**
+ * https://vjudge.net/problem/LightOJ-1229
+ */
+public class TestConsistencyChecker{
 }
