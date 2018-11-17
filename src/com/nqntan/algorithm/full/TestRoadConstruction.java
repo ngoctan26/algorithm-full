@@ -2,15 +2,36 @@ package com.nqntan.algorithm.full;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.Set;
 
 public class TestRoadConstruction {
 
     public static void main(String[] args) {
+        Employee employee = new Employee();
+        employee.id = 1;
+        employee.importance = 5;
+        employee.subordinates = Arrays.asList(2, 3);
+
+        Employee employee1 = new Employee();
+        employee.id = 2;
+        employee.importance = 3;
+        employee.subordinates = Collections.emptyList();
+
+        Employee employee2 = new Employee();
+        employee.id = 3;
+        employee.importance = 3;
+        employee.subordinates = Collections.emptyList();
+
+
+
+
         Scanner scanner = new Scanner(System.in);
         int numberOfTCs = scanner.nextInt();
         int tmpCount = 1;
@@ -106,5 +127,71 @@ public class TestRoadConstruction {
         public int compareTo(Node o) {
             return this.dist.compareTo(o.dist);
         }
+    }
+
+    // DO NOT MODIFY THE LIST. IT IS READ ONLY
+    public static ArrayList<Integer> repeatedNumber(final List<Integer> A) {
+        Map<Integer, Integer> countMap = new HashMap<>();
+        ArrayList<Integer> result = new ArrayList<>();
+        for (Integer input : A) {
+            Integer count = countMap.get(input);
+            if (count == null) {
+                count = 1;
+            } else {
+                count++;
+            }
+            if (count > 1) {
+                result.add(0, input);
+            }
+            countMap.put(input, count);
+        }
+        int tmpCount = 1;
+        while (countMap.get(tmpCount) != null) {
+            tmpCount++;
+        }
+        result.add(1, tmpCount);
+        return result;
+    }
+
+    //[[1,5,[2,3]],[2,3,[4]],[3,4,[]],[4,1,[]]]
+    //[[1,5,[2,3]],[2,3,[]],[3,3,[]]]
+
+    public static int getImportance(List<Employee> employees, int id) {
+        Employee checkingEmployee = null;
+        Map<Integer, Employee> employeeImportantCache = new HashMap<>();
+        for (Employee employee : employees) {
+            if (employee.id == id) {
+                checkingEmployee = employee;
+            }
+            employeeImportantCache.put(employee.id, employee);
+        }
+        Set<Integer> checkedIDs = new HashSet<>();
+        List<Integer> checkingSubordinates = checkingEmployee.subordinates;
+        checkedIDs.addAll(checkingSubordinates);
+        int result = checkingEmployee.importance;
+        result += getImportanceOfChild(checkedIDs, checkingSubordinates, employeeImportantCache);
+        return result;
+    }
+
+    private static int getImportanceOfChild(Set<Integer> records, List<Integer> checkingIDs, Map<Integer, Employee> employeeImportantCache) {
+        int result = 0;
+        for (Integer checkingID : checkingIDs) {
+            Employee employee = employeeImportantCache.get(checkingID);
+            List<Integer> childEmployees = employee.subordinates;
+            if (!records.contains(checkingID)) {
+                result += employee.importance;
+                records.add(checkingID);
+            }
+            if (!childEmployees.isEmpty()) {
+                result += getImportanceOfChild(records, childEmployees, employeeImportantCache);
+            }
+        }
+        return result;
+    }
+
+    private static class Employee {
+        public int id;
+        public int importance;
+        public List<Integer> subordinates;
     }
 }

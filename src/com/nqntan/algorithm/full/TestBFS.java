@@ -1,4 +1,6 @@
-package com.nqntan.algorithm.full.common;
+package com.nqntan.algorithm.full;
+
+import com.nqntan.algorithm.full.common.BFS;
 
 import java.util.ArrayList;
 import java.util.List;
